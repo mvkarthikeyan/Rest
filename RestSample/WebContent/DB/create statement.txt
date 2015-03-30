@@ -1,0 +1,8 @@
+CREATE DATABASE `restcrud` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE TABLE `company_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `hr` varchar(45) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
