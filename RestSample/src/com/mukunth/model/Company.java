@@ -3,16 +3,27 @@ package com.mukunth.model;
 public class Company {
 	
 	int id;
-	String CompanyName;
-	String floor;
-	int contactNumber;
+	String companyName;
+	String hrPerson;
+	String contactNumber;
 	
-	public Company(int id, String companyName, String floor, int contactNumber) {
+	public Company(int id, String companyName, String hrPerson, String contactNumber) {
 		super();
 		this.id = id;
-		CompanyName = companyName;
-		this.floor = floor;
+		this.companyName = companyName;
+		this.hrPerson = hrPerson;
 		this.contactNumber = contactNumber;
+	}
+	
+	public Company(String companyName, String hrPerson, String contactNumber) {
+		super();
+		this.companyName = companyName;
+		this.hrPerson = hrPerson;
+		this.contactNumber = contactNumber;
+	}
+
+	public Company() {
+		super();
 	}
 
 	public int getId() {
@@ -20,14 +31,14 @@ public class Company {
 	}
 
 	public String getCompanyName() {
-		return CompanyName;
+		return companyName;
 	}
 
-	public String getFloor() {
-		return floor;
+	public String gethrPerson() {
+		return hrPerson;
 	}
 
-	public int getContactNumber() {
+	public String getContactNumber() {
 		return contactNumber;
 	}
 
@@ -36,14 +47,14 @@ public class Company {
 	}
 
 	public void setCompanyName(String companyName) {
-		CompanyName = companyName;
+		this.companyName = companyName;
 	}
 
-	public void setFloor(String floor) {
-		this.floor = floor;
+	public void sethrPerson(String hrPerson) {
+		this.hrPerson = hrPerson;
 	}
 
-	public void setContactNumber(int contactNumber) {
+	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
 	

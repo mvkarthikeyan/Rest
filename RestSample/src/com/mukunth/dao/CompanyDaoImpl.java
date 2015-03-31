@@ -35,7 +35,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("select * from company_master");
 			while(rs.next()) {
-			Company company = new Company(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4));
+			Company company = new Company(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getString(4));
 			companyList.add(company);
 			}
 		} catch (SQLException e) {
@@ -58,7 +58,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			pst.setInt(1, id);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				company = new Company(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4));
+				company = new Company(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getString(4));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -67,6 +67,63 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 		
 		return company;
+	}
+
+	@Override
+	public int deleteCompanyByID(int id) {
+		Connection con = null;
+		PreparedStatement pst = null;
+		con = (Connection) ConnectionManager.getConnection();
+		try {
+			pst = (PreparedStatement) con.prepareStatement("delete from company_master where id=?");
+			pst.setInt(1, id);
+			return (pst.executeUpdate());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.closeConnection(con);
+		}
+		return 0;
+	}
+
+	@Override
+	public int createCompanyByID(Company company) {
+		Connection con = null;
+		PreparedStatement pst = null;
+		con = (Connection) ConnectionManager.getConnection();
+		try {
+			pst = (PreparedStatement) con.prepareStatement("insert into company_master (name,hr,phone) values (?,?,?)");
+			pst.setString(1, company.getCompanyName());
+			pst.setString(2, company.gethrPerson());
+			pst.setString(3, company.getContactNumber());
+			return (pst.executeUpdate());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.closeConnection(con);
+		}
+		return 0;
+	}
+
+	@Override
+	public int updateCompanyByID(Company company) {
+		Connection con = null;
+		PreparedStatement pst = null;
+		con = (Connection) ConnectionManager.getConnection();
+		try {
+			pst = (PreparedStatement) con.prepareStatement("update company_master set name=?,hr=?,phone=? where id=? ");
+			pst.setString(1, company.getCompanyName());
+			pst.setString(2, company.gethrPerson());
+			pst.setString(3, company.getContactNumber());
+			pst.setInt(4, company.getId());
+			return (pst.executeUpdate());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.closeConnection(con);
+		}
+		
+		return 0;
 	}
 
 }
