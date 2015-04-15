@@ -36,7 +36,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("select * from employee_master");
 			while(rs.next()) {
-				Employee employee = new Employee(rs.getInt(1),rs.getString(2), rs.getString(3));
+				Employee employee = new Employee(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4));
 				employeeList.add(employee);
 			}
 		} catch (SQLException e) {
@@ -48,18 +48,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public Employee getEmployeeByID(int id) {
+	public Employee getEmployeeByID(int id,int companyId) {
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		con = (Connection) ConnectionManager.getConnection();
 		Employee employee = null;
 		try {
-			pst = (PreparedStatement) con.prepareStatement("select * from employee_master where employee_id=?");
+			pst = (PreparedStatement) con.prepareStatement("select * from employee_master where employee_id=? and companyId=?");
 			pst.setInt(1, id);
+			pst.setInt(2, companyId);
 			rs = pst.executeQuery();
 			while(rs.next()) {
-				employee = new Employee(rs.getInt(1),rs.getString(2), rs.getString(3));
+				employee = new Employee(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,14 +72,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public int deleteEmployeeByID(int id) {
+	public int deleteEmployeeByID(int id, int companyId) {
 		Connection con = null;
 		PreparedStatement pst = null;
 		System.out.println(id);
 		con = (Connection) ConnectionManager.getConnection();
 		try {
-			pst = (PreparedStatement) con.prepareStatement("delete from employee_master where employee_id=?");
+			pst = (PreparedStatement) con.prepareStatement("delete from employee_master where employee_id=? and companyId=?");
 			pst.setInt(1, id);
+			pst.setInt(2, companyId);
 			return (pst.executeUpdate());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,9 +96,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		PreparedStatement pst = null;
 		con = (Connection) ConnectionManager.getConnection();
 		try {
-			pst = (PreparedStatement) con.prepareStatement("insert into employee_master (name,department) values (?,?)");
+			pst = (PreparedStatement) con.prepareStatement("insert into employee_master (name,department,companyId) values (?,?,?)");
 			pst.setString(1, employee.getName());
 			pst.setString(2, employee.getDepartment());
+			pst.setInt(3, employee.getCompanyId());
 			return (pst.executeUpdate());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -107,15 +110,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public int updateEmployeeByID(Employee employee) {
+	public int updateEmployeeByID(Employee employee, int companyId) {
 		Connection con = null;
 		PreparedStatement pst = null;
 		con = (Connection) ConnectionManager.getConnection();
 		try {
-			pst = (PreparedStatement) con.prepareStatement("update employee_master set name=?,department=? where employee_id=? ");
+			pst = (PreparedStatement) con.prepareStatement("update employee_master set name=?,department=? where employee_id=?  and companyId=?");
 			pst.setString(1, employee.getName());
 			pst.setString(2, employee.getDepartment());
 			pst.setInt(3, employee.getId());
+			pst.setInt(4, employee.getCompanyId());
 			return (pst.executeUpdate());
 		} catch (SQLException e) {
 			e.printStackTrace();

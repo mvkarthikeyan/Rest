@@ -2,17 +2,27 @@ package com.mukunth.model;
 
 public class Employee {
 	
-	int id;
-	String name;
-	String department;
+	private int id;
+	private String name;
+	private String department;
+	private int companyId;
 	
-	public Employee(int id, String name, String department) {
+	public Employee(int id, String name, String department, int companyId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.department = department;
+		this.companyId = companyId;
 	}
 	
+	public int getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
+
 	public Employee() {
 		super();
 	}

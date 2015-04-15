@@ -9,13 +9,13 @@ public interface EmployeeDao {
 	
 	List<Employee> getEmployee();
 	
-	int deleteEmployeeByID(int employeeId);
+	int deleteEmployeeByID(int employeeId, int companyId);
 
 	int createEmployeeByID(Employee Employee);
 
-	int updateEmployeeByID(Employee Employee);
+	int updateEmployeeByID(Employee Employee, int companyId);
 
-	Employee getEmployeeByID(int employeeId);
+	Employee getEmployeeByID(int employeeId, int companyId);
 
 }
  

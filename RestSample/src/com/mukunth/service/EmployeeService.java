@@ -15,14 +15,21 @@ import javax.ws.rs.core.Response;
 
 import com.mukunth.dao.EmployeeDaoImpl;
 import com.mukunth.dao.EmployeeDaoImpl;
+import com.mukunth.exceptions.InputIdException;
 import com.mukunth.model.Employee;
 import com.mukunth.model.Employee;
 
 @Produces(MediaType.APPLICATION_JSON)
 public class EmployeeService {
 	
+	private int companyId;
+	
+	public EmployeeService(int companyId) {
+		this.companyId = companyId;
+	}
+
 	@GET
-	public Response getList() {
+	public Response getList() throws NumberFormatException {
 		List<Employee> employee = EmployeeDaoImpl.getInstance().getEmployee();
 		return Response.status(200).entity(employee).build();
 	}
@@ -30,14 +37,14 @@ public class EmployeeService {
 	@GET
 	@Path("{employeeId}")
 	public Response getEmployee(@PathParam("employeeId") int employeeId) {
-		Employee employee = EmployeeDaoImpl.getInstance().getEmployeeByID(employeeId);
+		Employee employee = EmployeeDaoImpl.getInstance().getEmployeeByID(employeeId, companyId);
 	return Response.status(200).entity(employee).build();
 	}
 	
 	@DELETE
 	@Path("{employeeId}")
 	public Response deleteEmployee(@PathParam("employeeId") int employeeId) {
-		int n = EmployeeDaoImpl.getInstance().deleteEmployeeByID(employeeId);
+		int n = EmployeeDaoImpl.getInstance().deleteEmployeeByID(employeeId, companyId);
 		if(n > 0) 
 			return Response.status(204).build();
 		else
@@ -47,6 +54,7 @@ public class EmployeeService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEmployee(Employee Employee) {
+		Employee.setCompanyId(companyId);
 		int n = EmployeeDaoImpl.getInstance().createEmployeeByID(Employee);
 		if(n > 0) {
 			return Response.status(201).build();
@@ -60,7 +68,8 @@ public class EmployeeService {
 	@Path("{employeeId}")
 	public Response updateEmployee(Employee employee, @PathParam("employeeId") int employeeId) {
 		employee.setId(employeeId);
-		int n = EmployeeDaoImpl.getInstance().updateEmployeeByID(employee);
+		employee.setCompanyId(companyId);
+		int n = EmployeeDaoImpl.getInstance().updateEmployeeByID(employee, companyId);
 		if(n > 0) {
 			return Response.status(204).build();
 		}

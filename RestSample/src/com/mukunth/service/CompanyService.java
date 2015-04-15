@@ -77,9 +77,9 @@ public class CompanyService {
 			return Response.status(404).entity("Id not valid").build();
 	}
 	
-	@Path("{id}/employee")
-	public EmployeeService employee(@PathParam("employeeId") String employeeId) {
-		return new EmployeeService();
+	@Path("{companyId}/employee")
+	public EmployeeService employee(@PathParam("companyId") int companyId) {
+		return new EmployeeService(companyId);
 	}
 	
 } 
