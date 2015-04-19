@@ -2,20 +2,20 @@ package com.mukunth.dao;
 
 import java.util.List;
 
-import com.mukunth.model.Company;
+import com.mukunth.exceptions.ResourceException;
 import com.mukunth.model.Employee;
 
 public interface EmployeeDao {
 	
-	List<Employee> getEmployee();
+	List<Employee> getEmployee(int companyId);
 	
-	int deleteEmployeeByID(int employeeId, int companyId);
+	void deleteEmployeeByID(int employeeId, int companyId);
 
-	int createEmployeeByID(Employee Employee);
+	void createEmployeeByID(Employee Employee);
 
-	int updateEmployeeByID(Employee Employee, int companyId);
+	void updateEmployeeByID(Employee Employee, int companyId);
 
-	Employee getEmployeeByID(int employeeId, int companyId);
+	Employee getEmployeeByID(int employeeId, int companyId) throws ResourceException;
 
 }
  

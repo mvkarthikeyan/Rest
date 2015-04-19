@@ -1,20 +1,22 @@
 package com.mukunth.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import com.mukunth.exceptions.ResourceException;
 import com.mukunth.model.Company;
 
 public interface CompanyDao {
 	
 	List<Company> getCompany();
 	
-	Company getCompanyByID(int id);
+	Company getCompanyByID(int id) throws ResourceException;
 	
-	int deleteCompanyByID(int id);
+	void deleteCompanyByID(int id);
 
-	int createCompanyByID(Company company);
+	void createCompanyByID(Company company) throws SQLException;
 
-	int updateCompanyByID(Company company);
+	void updateCompanyByID(Company company);
 
 }
  

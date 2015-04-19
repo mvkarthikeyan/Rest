@@ -1,5 +1,6 @@
 package com.mukunth.model;
 
+
 public class Company {
 	
 	int id;
@@ -15,13 +16,6 @@ public class Company {
 		this.contactNumber = contactNumber;
 	}
 	
-	public Company(String companyName, String hrPerson, String contactNumber) {
-		super();
-		this.companyName = companyName;
-		this.hrPerson = hrPerson;
-		this.contactNumber = contactNumber;
-	}
-
 	public Company() {
 		super();
 	}
@@ -57,7 +51,12 @@ public class Company {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "Company [id=" + id + ", companyName=" + companyName
+				+ ", hrPerson=" + hrPerson + ", contactNumber=" + contactNumber
+				+ "]";
+	}
+	
 }

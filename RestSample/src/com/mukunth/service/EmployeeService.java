@@ -12,11 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import com.mukunth.dao.EmployeeDaoImpl;
-import com.mukunth.dao.EmployeeDaoImpl;
-import com.mukunth.exceptions.InputIdException;
-import com.mukunth.model.Employee;
+import com.mukunth.exceptions.ResourceException;
 import com.mukunth.model.Employee;
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,52 +26,43 @@ public class EmployeeService {
 	}
 
 	@GET
-	public Response getList() throws NumberFormatException {
-		List<Employee> employee = EmployeeDaoImpl.getInstance().getEmployee();
+	public Response getEmployeeList() throws NumberFormatException {
+		List<Employee> employee = EmployeeDaoImpl.getInstance().getEmployee(companyId);
 		return Response.status(200).entity(employee).build();
 	}
 	
 	@GET
 	@Path("{employeeId}")
-	public Response getEmployee(@PathParam("employeeId") int employeeId) {
+	public Response getEmployee(@PathParam("employeeId") int employeeId) throws ResourceException {
 		Employee employee = EmployeeDaoImpl.getInstance().getEmployeeByID(employeeId, companyId);
 	return Response.status(200).entity(employee).build();
 	}
 	
 	@DELETE
 	@Path("{employeeId}")
-	public Response deleteEmployee(@PathParam("employeeId") int employeeId) {
-		int n = EmployeeDaoImpl.getInstance().deleteEmployeeByID(employeeId, companyId);
-		if(n > 0) 
+	public Response deleteEmployee(@PathParam("employeeId") int employeeId) throws ResourceException {
+		getEmployee(employeeId);
+		EmployeeDaoImpl.getInstance().deleteEmployeeByID(employeeId, companyId);
 			return Response.status(204).build();
-		else
-			return Response.status(404).entity("Employee details not found").build();
 	}	
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEmployee(Employee Employee) {
 		Employee.setCompanyId(companyId);
-		int n = EmployeeDaoImpl.getInstance().createEmployeeByID(Employee);
-		if(n > 0) {
+		EmployeeDaoImpl.getInstance().createEmployeeByID(Employee);
 			return Response.status(201).build();
-		}
-			else
-			return Response.status(500).entity("Internal Server Error").build();
 	}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{employeeId}")
-	public Response updateEmployee(Employee employee, @PathParam("employeeId") int employeeId) {
+	public Response updateEmployee(Employee employee, @PathParam("employeeId") int employeeId) throws ResourceException {
+		getEmployee(employeeId);
 		employee.setId(employeeId);
 		employee.setCompanyId(companyId);
-		int n = EmployeeDaoImpl.getInstance().updateEmployeeByID(employee, companyId);
-		if(n > 0) {
+		EmployeeDaoImpl.getInstance().updateEmployeeByID(employee, companyId);
 			return Response.status(204).build();
-		}
-			else
-			return Response.status(404).entity("Id not valid").build();
 	}
 
 }

@@ -6,10 +6,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mukunth.exceptions.ResourceException;
 import com.mukunth.general.ConnectionManager;
 import com.mukunth.model.Company;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+import com.sun.jersey.api.ConflictException;
 
 public class CompanyDaoImpl implements CompanyDao {
 	
@@ -47,7 +49,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public Company getCompanyByID(int id) {
+	public Company getCompanyByID(int id) throws ResourceException {
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -60,6 +62,9 @@ public class CompanyDaoImpl implements CompanyDao {
 			while(rs.next()) {
 				company = new Company(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getString(4));
 			}
+			if(company == null) {
+				throw new ResourceException();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -70,43 +75,48 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public int deleteCompanyByID(int id) {
+	public void deleteCompanyByID(int id) {
 		Connection con = null;
 		PreparedStatement pst = null;
 		con = (Connection) ConnectionManager.getConnection();
 		try {
 			pst = (PreparedStatement) con.prepareStatement("delete from company_master where id=?");
 			pst.setInt(1, id);
-			return (pst.executeUpdate());
+			pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionManager.closeConnection(con);
 		}
-		return 0;
 	}
 
 	@Override
-	public int createCompanyByID(Company company) {
+	public void createCompanyByID(Company company) {
 		Connection con = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		con = (Connection) ConnectionManager.getConnection();
 		try {
+			pst = (PreparedStatement) con.prepareStatement("select * from company_master where name=?");
+			pst.setString(1, company.getCompanyName());
+			rs = pst.executeQuery();
+			if(rs.next()) {
+				throw new ConflictException();
+			}
 			pst = (PreparedStatement) con.prepareStatement("insert into company_master (name,hr,phone) values (?,?,?)");
 			pst.setString(1, company.getCompanyName());
 			pst.setString(2, company.gethrPerson());
 			pst.setString(3, company.getContactNumber());
-			return (pst.executeUpdate());
+			pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionManager.closeConnection(con);
 		}
-		return 0;
 	}
 
 	@Override
-	public int updateCompanyByID(Company company) {
+	public void updateCompanyByID(Company company) {
 		Connection con = null;
 		PreparedStatement pst = null;
 		con = (Connection) ConnectionManager.getConnection();
@@ -116,14 +126,12 @@ public class CompanyDaoImpl implements CompanyDao {
 			pst.setString(2, company.gethrPerson());
 			pst.setString(3, company.getContactNumber());
 			pst.setInt(4, company.getId());
-			return (pst.executeUpdate());
+			pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionManager.closeConnection(con);
 		}
-		
-		return 0;
 	}
 
 }
