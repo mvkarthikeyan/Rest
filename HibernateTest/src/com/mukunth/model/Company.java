@@ -1,15 +1,23 @@
 package com.mukunth.model;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-
+@Entity
 public class Company {
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	int id;
 	@Length(min=10)
-	@JsonProperty
 	String companyName;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Company")
 	String hrPerson;
 	String contactNumber;
 	
